@@ -1,0 +1,26 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="container-fluid align-center" style="padding: 0;">
+            <h2 class="pull-left" style="margin: 0; padding: 0;">Contacts</h2>
+            <div class="middle"></div>
+            <a class="btn btn-success pull-right">Add Contact</a>
+        </div>
+    </div>
+
+    
+    <div class="panel-body">
+        <div>
+            @for (contact of contacts; track $index) {
+                <a href="#" class="list-group-item clearfix">
+                    <div class="pull-left">
+                        <h4 class="list-group-item-heading">{{ contact.name }}</h4>
+                    </div>
+                    <span class="pull-right">
+                        <img src="{{ contact.imageUrl }}"
+                            alt="Image for {{ contact.name }}" class="img-responsive" style="max-height: 50px;">
+                    </span>
+                </a>
+            }
+        </div>
+    </div>
+</div>

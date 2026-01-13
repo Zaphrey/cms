@@ -1,0 +1,10 @@
+.align-panel-header-center {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: left;
+}
+
+.align-panel-header-center div.middle {
+    flex-grow: 1;
+}
