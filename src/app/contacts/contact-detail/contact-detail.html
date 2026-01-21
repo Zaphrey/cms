@@ -2,7 +2,7 @@
     <div class="panel-heading">
         <div class="row">
             <div class="col-xs-6">
-                <h2 style="margin: 0;">Rex Barzee</h2>
+                <h2 style="margin: 0;">{{ contact?.name }}</h2>
             </div>
         
             <div class="container-fluid col-xs-auto pull-right">
@@ -11,16 +11,16 @@
             </div>
         </div>
         <hr style="margin: 1em;">
-        <img src="" alt="" class="img-responsive" style="max-height: 100px;">
+        <img src="{{ contact?.imageUrl }}" alt="Image for {{ contact?.name }}" class="img-responsive" style="max-height: 100px;">
     </div>
 
     <div class="panel-body">
         <!-- Add data binding here when supported -->
         <div>
-            <strong>Email: </strong><span></span>
+            <strong>Email: </strong><span>{{ contact?.email }}</span>
         </div>
         <div>
-            <strong>Phone: </strong><span></span>
+            <strong>Phone: </strong><span>{{ contact?.phone }}</span>
         </div>
     </div>
 </div>

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ContactList } from "./contact-list/contact-list";
 import { ContactDetail } from "./contact-detail/contact-detail";
+import { Contact } from './contact.model';
 
 @Component({
   selector: 'app-contacts',
@@ -9,5 +10,5 @@ import { ContactDetail } from "./contact-detail/contact-detail";
   styleUrl: './contacts.css',
 })
 export class Contacts {
-
+  @Input() selectedContact: Contact | undefined = undefined;
 }
