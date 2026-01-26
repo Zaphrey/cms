@@ -7,7 +7,9 @@
     </div>
     <div class="panel-body">
         <div class="center-panel">
-            <!--Add tag to display a list of DocumentItem components-->
+            @for (documentEl of documents; track $index) {
+                <app-document-item [document]="documentEl" (click)="onSelectedDocument(documentEl)" />
+            }
         </div>
     </div>
 

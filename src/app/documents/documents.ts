@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DocumentList } from './document-list/document-list';
 import { DocumentDetail } from './document-detail/document-detail';
+import { Document } from './document.model';
 
 @Component({
   selector: 'app-documents',
@@ -9,5 +10,9 @@ import { DocumentDetail } from './document-detail/document-detail';
   styleUrl: './documents.css',
 })
 export class Documents {
+  selectedDocument: Document | undefined;
 
+  ngOnChanges() {
+    console.log(this.selectedDocument)
+  }
 }
