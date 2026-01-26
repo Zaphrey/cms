@@ -11,8 +11,4 @@ import { Document } from './document.model';
 })
 export class Documents {
   selectedDocument: Document | undefined;
-
-  ngOnChanges() {
-    console.log(this.selectedDocument)
-  }
 }

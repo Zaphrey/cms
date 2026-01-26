@@ -3,7 +3,6 @@
         <app-document-list (selectedDocumentEvent)="selectedDocument = $event" />
     </div>
 
-    
     <div class="col-md-4">
         @if (selectedDocument) {
             <app-document-detail [document]="selectedDocument" />
