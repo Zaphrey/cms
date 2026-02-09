@@ -1,14 +1,14 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <div class="row pad-left-right">
-            <span class="pull-left title">Add Documents</span>
-            <a class="btn btn-success pull-right">Add Document</a>
+            <span class="pull-left title">Documents</span>
+            <a class="btn btn-success pull-right" [routerLink]="['new']">Add Document</a>
         </div>
     </div>
     <div class="panel-body">
         <div class="center-panel">
             @for (documentEl of documents; track $index) {
-                <app-document-item [document]="documentEl" (click)="onSelectedDocument(documentEl)" />
+                <app-document-item [document]="documentEl" />
             }
         </div>
     </div>

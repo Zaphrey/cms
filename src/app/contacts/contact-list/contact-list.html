@@ -3,7 +3,7 @@
         <div class="container-fluid align-center" style="padding: 0;">
             <h2 class="pull-left" style="margin: 0; padding: 0;">Contacts</h2>
             <div class="middle"></div>
-            <a class="btn btn-success pull-right">Add Contact</a>
+            <a class="btn btn-success pull-right" [routerLink]="['new']">Add Contact</a>
         </div>
     </div>
 
@@ -11,7 +11,7 @@
     <div class="panel-body">
         <div>
             @for (contactItem of contacts; track $index) {
-                <app-contact-item [contact]="contactItem" (click)="onSelected(contactItem)" />
+                <app-contact-item [contact]="contactItem" />
             }
         </div>
     </div>

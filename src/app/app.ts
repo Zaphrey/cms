@@ -1,20 +1,14 @@
 import { Component, signal } from '@angular/core';
 import { Header } from './header';
-import { Contacts } from './contacts/contacts';
-import { Documents } from "./documents/documents";
-import { MessageList } from "./messages/message-list/message-list";
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [Header, Contacts, Documents, MessageList],
+  imports: [Header, RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
   protected readonly title = signal('cms');
   selectedFeature: string = "documents";
-
-  switchView(feature: string) {
-    this.selectedFeature = feature;
-  }
 }

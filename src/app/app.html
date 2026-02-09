@@ -1,8 +1,8 @@
-<app-header (selectedFeatureEvent)="switchView($event)"></app-header>
-<div class="pull-left container">
-    @switch (selectedFeature) {
-        @case ("documents") { <app-documents /> }
-        @case ("messages") { <app-message-list /> }
-        @case ("contacts") { <app-contacts /> }
-    }   
+<app-header></app-header>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <router-outlet />
+        </div>
+    </div>
 </div>
