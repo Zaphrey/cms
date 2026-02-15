@@ -1,17 +1,21 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Document } from './document.model';
 import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DocumentService {
   documents: Document[] = [];
+  maxDocumentId: number = 0;
+
   documentSelectedEvent = new EventEmitter<Document>();
-  documentChangedEvent = new EventEmitter<Document[]>();
+  documentsChangedEvent = new Subject<Document[]>();
 
   constructor() {
     this.documents = MOCKDOCUMENTS;
+    this.maxDocumentId = this.getMaxId();
   }
 
   getDocuments(): Document[] {
@@ -28,18 +32,54 @@ export class DocumentService {
     return undefined;
   }
 
+  getMaxId(): number {
+    let maxId = 0;
+    
+    this.documents.forEach((document: Document) => {
+      // Get the greatest id out of either maxId or the document's id 
+      maxId = Math.max(maxId, +document.id);
+    })
+
+    return maxId;
+  }
+
   deleteDocument(document: Document): void {
-    if (!document) {
+    if (!document)
       return;
-    }
 
     const pos = this.documents.indexOf(document);
 
-    if (pos < 0) {
+    if (pos < 0) 
       return;
-    }
-
+    
     this.documents.splice(pos, 1);
-    this.documentChangedEvent.emit(this.documents.slice());
+    this.documentsChangedEvent.next(this.documents.slice());
+  }
+
+  addDocument(newDocument: Document) {
+    if (!newDocument)
+      return;
+
+    this.maxDocumentId++;
+
+    newDocument.id = this.maxDocumentId.toString();
+    this.documents.push(newDocument);
+
+    this.documentsChangedEvent.next(this.documents.slice());
+  }
+
+  updateDocument(originalDocument: Document, newDocument: Document) {
+    if (!originalDocument || !newDocument)
+      return;
+
+    let originalPos = this.documents.indexOf(originalDocument);
+
+    if (originalPos < 0)
+      return;
+
+    newDocument.id = originalDocument.id;
+    this.documents[originalPos] = newDocument;
+
+    this.documentsChangedEvent.next(this.documents.slice());
   }
 }
