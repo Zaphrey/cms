@@ -33,15 +33,15 @@ export class ContactService {
   }
 
   getMaxId(): number {
-      let maxId = 0;
-      
-      this.contacts.forEach((contact: Contact) => {
-        // Get the greatest id out of either maxId or the contact's id 
-        maxId = Math.max(maxId, +contact.id);
-      })
-  
-      return maxId;
-    }
+    let maxId = 0;
+    
+    this.contacts.forEach((contact: Contact) => {
+      // Get the greatest id out of either maxId or the contact's id 
+      maxId = Math.max(maxId, +contact.id);
+    })
+
+    return maxId;
+  }
 
   deleteContact(contact: Contact): void {
     if (!contact)
