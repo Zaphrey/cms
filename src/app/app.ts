@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 import { Header } from './header';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',

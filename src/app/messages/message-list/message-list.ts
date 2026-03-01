@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MessageEdit } from '../message-edit/message-edit';
 import { MessageItem } from '../message-item/message-item';
 import { Message } from '../message.model';
@@ -17,13 +17,19 @@ export class MessageList implements OnInit {
     this.messages.push(message);
   }
 
-  constructor(private messageService: MessageService) {}
+  constructor(
+    private messageService: MessageService,
+    private changeDetector: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.messages = this.messageService.getMessages();
 
     this.messageService.messageChangedEvent.subscribe((messages: Message[]) => {
       this.messages = messages;
+
+      // Angular wasn't automatically updating the page, so we need to force it to now.
+      this.changeDetector.markForCheck();
     })
   }
 }
