@@ -15,9 +15,9 @@ export class DocumentService {
   documentsChangedEvent = new Subject<Document[]>();
 
   constructor(private http: HttpClient) {
-    this.http.get<Document[]>("https://zwhcms-default-rtdb.firebaseio.com/documents.json").subscribe((response) => {
+    this.http.get<Document[]>("http://localhost:3000/documents").subscribe((response) => {
       this.documents = response;
-      this.maxDocumentId = this.getMaxId();
+      // this.maxDocumentId = this.getMaxId();
       this.documents.sort()
       this.documentsChangedEvent.next(this.documents.slice());
     }, (error: any) => {
@@ -25,14 +25,12 @@ export class DocumentService {
     })
   }
 
-  storeDocuments() {
-    const documentString = JSON.stringify(this.documents);
-    const headers = new HttpHeaders({ "ContentType": "application/json" });
-    this.http.put("https://zwhcms-default-rtdb.firebaseio.com/documents.json", documentString, { headers: headers }).subscribe(() => {
-      this.documentsChangedEvent.next(this.documents.slice())
-    }, (error: any) => {
-      console.log(error);
+  sortAndSend() {
+    const documentsCopy = this.documents.slice()
+    documentsCopy.sort((a, b) => {
+      return a.name.localeCompare(b.name);
     })
+    this.documentsChangedEvent.next(documentsCopy)
   }
 
   getDocuments(): Document[] {
@@ -49,54 +47,78 @@ export class DocumentService {
     return undefined;
   }
 
-  getMaxId(): number {
-    let maxId = 0;
+  // getMaxId(): number {
+  //   let maxId = 0;
     
-    this.documents.forEach((document: Document) => {
-      // Get the greatest id out of either maxId or the document's id 
-      maxId = Math.max(maxId, +document.id);
-    })
+  //   this.documents.forEach((document: Document) => {
+  //     // Get the greatest id out of either maxId or the document's id 
+  //     maxId = Math.max(maxId, +document.id);
+  //   })
 
-    return maxId;
-  }
+  //   return maxId;
+  // }
 
-  deleteDocument(document: Document): void {
-    if (!document)
+  deleteDocument(document: Document) {
+    if (!document) {
       return;
+    }
 
-    const pos = this.documents.indexOf(document);
+    const pos = this.documents.findIndex(d => d.id === document.id);
 
-    if (pos < 0) 
+    if (pos < 0) {
       return;
-    
-    this.documents.splice(pos, 1);
-    this.storeDocuments();
+    }
+
+    // delete from database
+    this.http.delete('http://localhost:3000/documents/' + document.id)
+    .subscribe(() => {
+        this.documents.splice(pos, 1);
+        this.sortAndSend();
+      }
+    );
   }
 
   addDocument(newDocument: Document) {
     if (!newDocument)
       return;
 
-    this.maxDocumentId++;
+    newDocument.id = "";
+    
+    const headers = new HttpHeaders({"Content-Type": "application/json"});
 
-    newDocument.id = this.maxDocumentId.toString();
-    this.documents.push(newDocument);
-
-    this.storeDocuments();
+    this.http.post<{message: string, document: Document}>("http://localhost:3000/documents", 
+      newDocument, 
+      {headers: headers}
+    ).subscribe(responseData => {
+      this.documents.push(responseData.document);
+      this.sortAndSend();
+    })
   }
 
   updateDocument(originalDocument: Document, newDocument: Document) {
-    if (!originalDocument || !newDocument)
+    if (!originalDocument || !newDocument) {
       return;
+    }
 
-    let originalPos = this.documents.indexOf(originalDocument);
+    const pos = this.documents.findIndex(d => d.id === originalDocument.id);
 
-    if (originalPos < 0)
+    if (pos < 0) {
       return;
+    }
 
+    // set the id of the new Document to the id of the old Document
     newDocument.id = originalDocument.id;
-    this.documents[originalPos] = newDocument;
+    // newDocument._id = originalDocument._id;
 
-    this.storeDocuments();
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    // update database
+    this.http.put('http://localhost:3000/documents/' + originalDocument.id,
+      newDocument, { headers: headers })
+      .subscribe(() => {
+          this.documents[pos] = newDocument;
+          this.sortAndSend();
+        }
+      );
   }
 }
